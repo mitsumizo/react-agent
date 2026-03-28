@@ -44,7 +44,7 @@ lint lint_diff lint_package lint_tests:
 
 format format_diff:
 	ruff format $(PYTHON_FILES)
-	ruff check --select I --fix $(PYTHON_FILES)
+	ruff check --select I,F401 --fix $(PYTHON_FILES)
 
 spell_check:
 	codespell --toml pyproject.toml

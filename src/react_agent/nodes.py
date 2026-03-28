@@ -1,4 +1,4 @@
-"""Define the function that calls the model"""
+"""Define the function that calls the model."""
 
 from datetime import UTC, datetime
 from typing import Dict, List, cast
@@ -10,6 +10,7 @@ from react_agent.context import Context
 from react_agent.state import State
 from react_agent.tools import TOOLS
 from react_agent.utils import load_chat_model
+
 
 async def call_model(
     state: State, runtime: Runtime[Context]
@@ -34,7 +35,7 @@ async def call_model(
     )
 
     # Get the model's response
-    response = cast( # type: ignore[redundant-cast]
+    response = cast(  # type: ignore[redundant-cast]
         AIMessage,
         await model.ainvoke(
             [{"role": "system", "content": system_message}, *state.messages]
@@ -55,5 +56,22 @@ async def call_model(
     # Return the model's response as a list to be added to existing messages
     return {"messages": [response]}
 
-async def translate_to_hakata(state: State, runtime: Runtime[Context]) -> Dict[str, List[AIMessage]]:
-    pass
+
+async def translate_to_hakata(
+    state: State, runtime: Runtime[Context]
+) -> Dict[str, List[AIMessage]]:
+    """Call the LLM to translate the last message to Hakata dialect."""
+    model = load_chat_model(runtime.context.model)
+
+    system_message = runtime.context.system_prompt.format(
+        system_time=datetime.now(tz=UTC).isoformat()
+    )
+
+    response = cast(
+        AIMessage,
+        await model.ainvoke(
+            [{"role": "system", "content": system_message}, *state.messages]
+        ),
+    )
+
+    return {"messages": [response]}

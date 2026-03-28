@@ -1,8 +1,11 @@
+"""Define the function that calls the model."""
+
 from typing import Literal
 
 from langchain_core.messages import AIMessage
 
 from react_agent.state import State
+
 
 def route_model_output(state: State) -> Literal["__end__", "tools"]:
     """Determine the next node based on the model's output.
@@ -25,4 +28,3 @@ def route_model_output(state: State) -> Literal["__end__", "tools"]:
         return "__end__"
     # Otherwise we execute the requested actions
     return "tools"
-
