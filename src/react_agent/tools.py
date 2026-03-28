@@ -26,4 +26,18 @@ async def search(query: str) -> Optional[dict[str, Any]]:
     return cast(dict[str, Any], await wrapped.ainvoke({"query": query}))
 
 
-TOOLS: List[Callable[..., Any]] = [search]
+def get_weather(location: str) -> str:
+    """指定された都市の天気を返します。
+    ただし、このツールは「東京」と「大阪」にしか対応していません。
+    それ以外の都市（福岡など）の天気については、こちらで試してみてダメだったら'search' ツール（Web検索）を使って調べてください。
+    """
+    # queryの中に「東京」が含まれていたら
+    if "東京" in location:
+        return "東京は快晴で、とても暑いです！嫌い！"
+    elif "大阪" in location:
+        return "大阪は雨で、寒いです！"
+    else:
+        return "ちょっとよくわかりません！"
+
+
+TOOLS: List[Callable[..., Any]] = [search, get_weather]
