@@ -21,6 +21,13 @@ class Context:
         },
     )
 
+    hakata_system_prompt: str = field(
+        default=prompts.HAKATA_SYSTEM_PROMPT,
+        metadata={
+            "description": "The system prompt to use for the agent's interactions. "
+        },
+    )
+
     model: Annotated[str, {"__template_metadata__": {"kind": "llm"}}] = field(
         default="anthropic/claude-sonnet-4-5-20250929",
         metadata={

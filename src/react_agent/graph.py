@@ -7,7 +7,7 @@ from langgraph.graph import StateGraph
 from langgraph.prebuilt import ToolNode
 
 from react_agent.context import Context
-from react_agent.nodes import call_model
+from react_agent.nodes import call_model, translate_to_hakata
 from react_agent.routing import route_model_output
 from react_agent.state import InputState, State
 from react_agent.tools import TOOLS
@@ -19,10 +19,12 @@ builder = StateGraph(State, input_schema=InputState, context_schema=Context)
 # Define the two nodes we will cycle between
 builder.add_node(call_model)
 builder.add_node("tools", ToolNode(TOOLS))
+builder.add_node("translate_to_hakata", translate_to_hakata)
 
 # Set the entrypoint as `call_model`
 # This means that this node is the first one called
 builder.add_edge("__start__", "call_model")
+builder.add_edge("translate_to_hakata", "__end__")
 
 # Add a conditional edge to determine the next step after `call_model`
 builder.add_conditional_edges(

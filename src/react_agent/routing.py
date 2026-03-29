@@ -7,7 +7,7 @@ from langchain_core.messages import AIMessage
 from react_agent.state import State
 
 
-def route_model_output(state: State) -> Literal["__end__", "tools"]:
+def route_model_output(state: State) -> Literal["translate_to_hakata", "tools"]:
     """Determine the next node based on the model's output.
 
     This function checks if the model's last message contains tool calls.
@@ -16,7 +16,7 @@ def route_model_output(state: State) -> Literal["__end__", "tools"]:
         state (State): The current state of the conversation.
 
     Returns:
-        str: The name of the next node to call ("__end__" or "tools").
+        str: The name of the next node to call ("translate_to_hakata" or "tools").
     """
     last_message = state.messages[-1]
     if not isinstance(last_message, AIMessage):
@@ -25,6 +25,6 @@ def route_model_output(state: State) -> Literal["__end__", "tools"]:
         )
     # If there is no tool call, then we finish
     if not last_message.tool_calls:
-        return "__end__"
+        return "translate_to_hakata"
     # Otherwise we execute the requested actions
     return "tools"

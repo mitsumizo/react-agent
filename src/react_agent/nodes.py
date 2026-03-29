@@ -63,9 +63,7 @@ async def translate_to_hakata(
     """Call the LLM to translate the last message to Hakata dialect."""
     model = load_chat_model(runtime.context.model)
 
-    system_message = runtime.context.system_prompt.format(
-        system_time=datetime.now(tz=UTC).isoformat()
-    )
+    system_message = runtime.context.hakata_system_prompt
 
     response = cast(
         AIMessage,
